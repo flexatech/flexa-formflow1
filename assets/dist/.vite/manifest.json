@@ -1,0 +1,18 @@
+{
+  "src/assets/logo.webp": {
+    "file": "assets/logo-DsbLjZiX.webp",
+    "src": "src/assets/logo.webp"
+  },
+  "src/main.tsx": {
+    "file": "assets/main-DUTqPKzb.js",
+    "name": "main",
+    "src": "src/main.tsx",
+    "isEntry": true,
+    "css": [
+      "assets/main-U3Xbyhos.css"
+    ],
+    "assets": [
+      "assets/logo-DsbLjZiX.webp"
+    ]
+  }
+}

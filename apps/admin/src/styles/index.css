@@ -1,0 +1,175 @@
+@import "tailwindcss" prefix(ff);
+@import "tw-animate-css" prefix(ff);
+
+@theme {
+    --color-brand-50: oklch(0.9720 0.0140 250.08); /* #eff7ff */
+    --color-brand-100: oklch(0.9380 0.0340 250.08); /* #daedff */
+    --color-brand-200: oklch(0.8880 0.0660 250.08); /* #badeff */
+    --color-brand-300: oklch(0.8220 0.1080 250.08); /* #8ecaff */
+    --color-brand-400: oklch(0.7520 0.1500 250.08); /* #5cb4ff */
+    --color-brand-500: oklch(0.7020 0.1680 250.08); /* #3ca3ff */
+    --color-brand-600: oklch(0.6496 0.1802 250.08); /* #0f92f7 */
+    --color-brand-700: oklch(0.5620 0.1760 250.08); /* #0076d7 */
+    --color-brand-800: oklch(0.4720 0.1500 250.08); /* #005cab */
+    --color-brand-900: oklch(0.4020 0.1200 250.08); /* #004985 */
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+}
+
+/* Tailwind v4 CSS-first dark-mode opt-in. AppProviders sets data-theme on a
+ * wrapper whose value follows the WP admin color scheme. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+#flexa-formflow-admin-root,
+.flexa-formflow-themed {
+    color-scheme: light dark;
+}
+
+/* Set on <body> while the fullscreen toggle is active (see main.tsx
+ * useFullscreen): the plugin root becomes a fixed, full-viewport overlay
+ * above wp-admin's own bars, so the page behind it must stop scrolling too. */
+body.flexa-formflow-fs-lock {
+    overflow: hidden;
+}
+
+/* WP admin's #wpcontent has 20px side padding - this margin trick bleeds the
+ * brand strip to the viewport edge. Keep margin-inline-end at 0 so we don't
+ * trigger a horizontal scrollbar. */
+.flexa-formflow-wrap {
+    margin-block-start: -10px;
+    margin-block-end: 0;
+    margin-inline-start: -20px;
+    margin-inline-end: 0;
+}
+
+/* WP admin's `h2, h3 { margin: 1em 0 }` (specificity 0,0,1) pushes every
+ * heading we render down by ~16px. `revert-layer` drops that unlayered WP
+ * margin and rolls the property back into the Tailwind layers: preflight zeroes
+ * it, then any `ff:mb-*` / `ff:m-*` utility the heading carries wins again. */
+:is(h2, h3)[class*="ff:"] {
+    margin: revert-layer;
+}
+
+/* WP admin also styles `h1..h4 { color:#1d2327; font-size:1.3em; font-weight }`
+ * UNLAYERED, so it outranks the Tailwind text/color utilities our headings
+ * carry (those live in cascade layers). `revert-layer` on this higher-
+ * specificity unlayered selector rolls the properties back into the Tailwind
+ * layers, so each heading's own `ff:text-*` / `ff:font-*` utility wins again. */
+:is(h1, h2, h3, h4, h5, h6)[class*="ff:"] {
+    font-size: revert-layer;
+    font-weight: revert-layer;
+    color: revert-layer;
+}
+
+/* wp-admin styles `p { margin: 1em 0 }` UNLAYERED, so it beats every margin
+ * utility (ff:mt-*, ff:mx-auto) regardless of specificity - auto centering
+ * silently collapses to 0. `revert-layer` on a higher-specificity unlayered
+ * selector rolls the margin back into the Tailwind layers: preflight zeroes
+ * it, then whatever margin utility the element carries wins again. */
+p[class*="ff:"] {
+    margin: revert-layer;
+}
+
+/* WP admin's unlayered `a { color: <scheme blue> }` (0,0,1) beats our layered
+ * ff:text-* utilities even at rest, so every plugin link renders WP link-blue
+ * instead of its own color (e.g. the sidebar nav). This marked selector (0,1,1)
+ * reverts `color` into the Tailwind layers so each link's ff:text-* wins. */
+a[class*="ff:"] {
+    color: revert-layer;
+}
+
+/* WP admin styles interactive links UNLAYERED and beats our utilities:
+ *  - `a:hover, a:active, a:focus { color: <scheme blue> }` flashes link-blue.
+ *  - `a:focus { box-shadow: 0 0 0 1.5px #3858e9 }` paints a blue focus ring
+ *    (on mouse click too).
+ * This higher-specificity unlayered selector (0,2,1 beats WP's 0,1,1) reverts
+ * both back into the Tailwind layers: `color` falls back to each link's own
+ * `ff:text-*` / `ff:hover:text-*`, and `box-shadow` falls back to a link's own
+ * `focus-visible:ring-*` where it has one (keyboard focus stays visible) or to
+ * none where it does not, so WP's ring is gone. */
+:is(a:hover, a:active, a:focus)[class*="ff:"] {
+    color: revert-layer;
+    box-shadow: revert-layer;
+}
+
+/* Dark surface defaults for the settings screen. The whole app is the dark
+ * surface (single root), so scope to `.flexa-formflow-themed`. High-traffic
+ * backgrounds/borders/text only - components opt in via `dark:` where they
+ * need finer control. The settings canvas is `ff:bg-slate-50`, cards are
+ * `ff:bg-white`, copy is `ff:text-slate-*`. */
+[data-theme="dark"] .flexa-formflow-themed .ff\:bg-slate-50,
+[data-theme="dark"] .flexa-formflow-themed .ff\:bg-slate-50\/60 {
+    background-color: #1d2327;
+}
+[data-theme="dark"] .flexa-formflow-themed .ff\:bg-white {
+    background-color: #2c3338;
+    color: inherit;
+}
+[data-theme="dark"] .flexa-formflow-themed .ff\:bg-slate-100 {
+    background-color: rgb(255 255 255 / 0.08);
+}
+[data-theme="dark"] .flexa-formflow-themed .ff\:hover\:bg-slate-50:hover,
+[data-theme="dark"] .flexa-formflow-themed .ff\:hover\:bg-slate-100:hover {
+    background-color: rgb(255 255 255 / 0.06);
+}
+[data-theme="dark"] .flexa-formflow-themed .ff\:text-slate-500,
+[data-theme="dark"] .flexa-formflow-themed .ff\:text-slate-600,
+[data-theme="dark"] .flexa-formflow-themed .ff\:text-slate-700,
+[data-theme="dark"] .flexa-formflow-themed .ff\:text-slate-800,
+[data-theme="dark"] .flexa-formflow-themed .ff\:text-slate-900 {
+    color: #e6e7e8;
+}
+[data-theme="dark"] .flexa-formflow-themed .ff\:border-slate-100,
+[data-theme="dark"] .flexa-formflow-themed .ff\:border-slate-200,
+[data-theme="dark"] .flexa-formflow-themed .ff\:border-slate-300 {
+    border-color: #3c434a;
+}
+
+/* WP's forms.css styles bare input/textarea/select (gray border, 3px radius,
+ * min-height, and a blue focus box-shadow) UNLAYERED, so it beats every
+ * Tailwind utility regardless of specificity. Re-assert the design on a stable
+ * `.flexa-formflow-control` marker (added to Input/Select). Bare marker (no theme
+ * scope) because controls also render inside Radix portals. Focus recolors the
+ * border to brand and removes WP's ring — never a transparent outline. */
+.flexa-formflow-control {
+    border: 1px solid #cbd5e1 !important; /* slate-300 */
+    border-radius: var(--radius-md) !important;
+    background-color: #fff !important;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+    min-height: 0 !important;
+    line-height: 1.25rem !important;
+    color: #0f172a !important; /* slate-900 */
+}
+.flexa-formflow-control:focus,
+.flexa-formflow-control:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: var(--color-brand-500) !important;
+}
+[data-theme="dark"] .flexa-formflow-control {
+    background-color: #2c3338 !important;
+    border-color: #3c434a !important;
+    color: #e6e7e8 !important;
+}
+/* WP paints input[type=checkbox]:focus with the same blue ring; kill it on our
+ * visible checkboxes/radios (marker: `.flexa-formflow-check`). */
+.flexa-formflow-check:focus,
+.flexa-formflow-check:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Radix Dialog/Tooltip portal to `document.body`, OUTSIDE
+ * `.flexa-formflow-themed`, so WP's `.wp-core-ui button` (specificity 0,1,1)
+ * outranks the `.ff\:text-white` utility (0,1,0) and turns the label of our
+ * brand/destructive buttons WP link-blue. The only buttons that set
+ * `text-white` sit on a colored background where losing white text breaks
+ * legibility, so a global !important is safe. (Portalled content also can't
+ * see `[data-theme="dark"]` - it's set on the themed wrapper, not an
+ * ancestor of the portal - so the DangerZone dialog renders on its own
+ * white card regardless of the admin color scheme, which stays legible.) */
+.ff\:text-white {
+    color: #fff !important;
+}

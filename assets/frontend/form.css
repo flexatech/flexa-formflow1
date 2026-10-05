@@ -1,0 +1,182 @@
+/* Flexa FormFlow frontend form. Neutral by design: inherits the theme's
+   typography, only lays out fields and styles its own controls lightly.
+   Brand color arrives per-form via the --ff-brand custom property. */
+
+.flexa-formflow-form {
+	--ff-brand: #007bea;
+	max-width: 100%;
+}
+
+.flexa-formflow-form__fields {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.flexa-formflow-field {
+	flex: 1 1 100%;
+	min-width: 0;
+}
+
+/* Desktop / base width. min-width keeps a sane auto-wrap safety net so a field
+   never collapses too narrow when no smaller-breakpoint width is set. */
+.flexa-formflow-field[data-ff-w='half'] {
+	flex-basis: calc( 50% - 0.5rem );
+	min-width: 240px;
+}
+
+.flexa-formflow-field[data-ff-w='third'] {
+	flex-basis: calc( 33.333% - 0.667rem );
+	min-width: 200px;
+}
+
+.flexa-formflow-field[data-ff-w='two-thirds'] {
+	flex-basis: calc( 66.666% - 0.333rem );
+	min-width: 260px;
+}
+
+/* Tablet override. min-width drops to 0 so the chosen fraction is honored on
+   smaller screens instead of the desktop safety net forcing a wrap. */
+@media ( max-width: 1024px ) {
+	.flexa-formflow-field[data-ff-w-tablet='full'] {
+		flex-basis: 100%;
+		min-width: 0;
+	}
+	.flexa-formflow-field[data-ff-w-tablet='half'] {
+		flex-basis: calc( 50% - 0.5rem );
+		min-width: 0;
+	}
+	.flexa-formflow-field[data-ff-w-tablet='third'] {
+		flex-basis: calc( 33.333% - 0.667rem );
+		min-width: 0;
+	}
+	.flexa-formflow-field[data-ff-w-tablet='two-thirds'] {
+		flex-basis: calc( 66.666% - 0.333rem );
+		min-width: 0;
+	}
+}
+
+/* Mobile override. Placed after the tablet block so that when both queries
+   match (very narrow viewports) the mobile width wins on equal specificity. */
+@media ( max-width: 640px ) {
+	.flexa-formflow-field[data-ff-w-mobile='full'] {
+		flex-basis: 100%;
+		min-width: 0;
+	}
+	.flexa-formflow-field[data-ff-w-mobile='half'] {
+		flex-basis: calc( 50% - 0.5rem );
+		min-width: 0;
+	}
+	.flexa-formflow-field[data-ff-w-mobile='third'] {
+		flex-basis: calc( 33.333% - 0.667rem );
+		min-width: 0;
+	}
+	.flexa-formflow-field[data-ff-w-mobile='two-thirds'] {
+		flex-basis: calc( 66.666% - 0.333rem );
+		min-width: 0;
+	}
+}
+
+.flexa-formflow-field > label,
+.flexa-formflow-field legend {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 0.375rem;
+}
+
+.flexa-formflow-required {
+	color: #d92d20;
+	margin-left: 0.125rem;
+}
+
+.flexa-formflow-field input[type='text'],
+.flexa-formflow-field input[type='email'],
+.flexa-formflow-field input[type='number'],
+.flexa-formflow-field input[type='date'],
+.flexa-formflow-field select,
+.flexa-formflow-field textarea {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid #cbd5e1;
+	border-radius: 0.375rem;
+	background: #fff;
+	font: inherit;
+}
+
+.flexa-formflow-field input:focus,
+.flexa-formflow-field select:focus,
+.flexa-formflow-field textarea:focus {
+	outline: none;
+	border-color: var( --ff-brand );
+	box-shadow: 0 0 0 3px color-mix( in srgb, var( --ff-brand ) 20%, transparent );
+}
+
+.flexa-formflow-field fieldset {
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+.flexa-formflow-choice {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 0.25rem;
+	font-weight: 400;
+}
+
+.flexa-formflow-field--invalid input,
+.flexa-formflow-field--invalid select,
+.flexa-formflow-field--invalid textarea {
+	border-color: #d92d20;
+}
+
+.flexa-formflow-error {
+	color: #d92d20;
+	font-size: 0.8125rem;
+	margin: 0.375rem 0 0;
+}
+
+.flexa-formflow-hp {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect( 0 0 0 0 );
+	white-space: nowrap;
+}
+
+.flexa-formflow-message {
+	margin: 1rem 0 0;
+	color: #b54708;
+}
+
+.flexa-formflow-submit {
+	margin-top: 1.25rem;
+	padding: 0.625rem 1.5rem;
+	border: 0;
+	border-radius: 0.375rem;
+	background: var( --ff-brand );
+	color: #fff;
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.flexa-formflow-submit:hover {
+	filter: brightness( 0.94 );
+}
+
+.flexa-formflow-submit:disabled {
+	opacity: 0.6;
+	cursor: default;
+}
+
+.flexa-formflow-success {
+	padding: 0.875rem 1rem;
+	border-radius: 0.375rem;
+	background: #ecfdf3;
+	color: #067647;
+	border: 1px solid #abefc6;
+}

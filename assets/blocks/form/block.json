@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "flexa-formflow/form",
+	"title": "FormFlow Form",
+	"category": "widgets",
+	"icon": "forms",
+	"description": "Embed a Flexa FormFlow form.",
+	"keywords": [ "form", "contact", "formflow" ],
+	"textdomain": "flexa-formflow",
+	"attributes": {
+		"formId": {
+			"type": "number",
+			"default": 0
+		}
+	},
+	"supports": {
+		"html": false
+	},
+	"editorScript": "flexa-formflow-block-editor"
+}
